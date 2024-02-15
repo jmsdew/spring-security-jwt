@@ -3,7 +3,6 @@ package com.ohgiraffers.security.auth.filter;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ohgiraffers.security.auth.model.dto.LoginDTO;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,7 +33,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         }
 
 
-        return this.getAuthenticationManager().authenticate(authenticationToken);
+        return this.getAuthenticationManager().authenticate(authenticationToken);  // 발행한 임시 토큰을 매니저에 담아 보내줌
     }
     
     /**
@@ -52,6 +51,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
         LoginDTO user = objectMapper.readValue(request.getInputStream(), LoginDTO.class);
                                                         //json 데이터를 뿌려줌. dto 형식으로 매핑  기본 설정이 세터. 생성자 만드는 건 자유
-        return new UsernamePasswordAuthenticationToken(user.getId(), user.getPass());
+        return new UsernamePasswordAuthenticationToken(user.getId(), user.getPass());  //임시 토큰 발행
     }
 }

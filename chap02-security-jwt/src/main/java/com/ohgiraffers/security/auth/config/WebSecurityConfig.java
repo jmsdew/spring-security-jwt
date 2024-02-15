@@ -1,6 +1,7 @@
 package com.ohgiraffers.security.auth.config;
 
 import com.ohgiraffers.security.auth.filter.CustomAuthenticationFilter;
+import com.ohgiraffers.security.auth.filter.JwtAuthorizationFilter;
 import com.ohgiraffers.security.auth.handler.CustomAuthFailureHandler;
 import com.ohgiraffers.security.auth.handler.CustomAuthSuccessHandler;
 import com.ohgiraffers.security.auth.handler.CustomAuthenticationProvider;
@@ -19,6 +20,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+
+
 
 @Configuration  // 설정된 리소스를 읽어 환경 구성 - 시작 시
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -98,8 +101,9 @@ public class WebSecurityConfig {
         authenticationFilter.setFilterProcessesUrl("/login");  // 어떤 요청 리소스를 가로챌지
         authenticationFilter.setAuthenticationSuccessHandler(customAuthSuccessHandler()); // 요청 성공 동작
         authenticationFilter.setAuthenticationFailureHandler(customAuthFailureHandler()); // 요청 실패 동작
+        authenticationFilter.afterPropertiesSet();
 
-        return customAuthenticationFilter();
+        return authenticationFilter;
     }
 
     /**
@@ -118,5 +122,14 @@ public class WebSecurityConfig {
     @Bean
     public CustomAuthFailureHandler customAuthFailureHandler(){
         return new CustomAuthFailureHandler();
+    }
+
+    /**
+     * 9. 사용자 요청 시 수행되는 메서드
+     * @return JwtAuthorizationFilter
+     * */
+    public JwtAuthorizationFilter jwtAuthorizationFilter(){
+
+        return new JwtAuthorizationFilter(authenticationManager());  // 만들어둔 매니저를 매개변수로 등록
     }
 }

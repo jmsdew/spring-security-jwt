@@ -5,6 +5,7 @@ import com.ohgiraffers.security.common.AuthConstants;
 import com.ohgiraffers.security.common.utils.ConvertUtil;
 import com.ohgiraffers.security.common.utils.TokenUtils;
 import com.ohgiraffers.security.user.entity.User;
+import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +25,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
 
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response , Authentication authentication) throws ServletException, IOException {
 
         User user = ((DetailsUser) authentication.getPrincipal()).getUser();
         JSONObject jsonValue = (JSONObject) ConvertUtil.convertObjectToJsonObject(user);
@@ -52,4 +53,5 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
         printWriter.close();
         
     }
+
 }
